@@ -1,4 +1,5 @@
 import json
+import re
 from openpyxl import load_workbook
 
 src_filename = "AquíNecesitamos.xlsx"
@@ -9,7 +10,7 @@ DATA_MIN_ROW = 6
 DATA_MAX_COL = 9
 
 # Data label
-URGENT_LEVEL = {"alto":"alta", "medio":"media", "bajo":"baja"}
+URGENT_LEVEL = {"alto":"URGE", "medio":"SeNecesita", "bajo":"SeNecesita"}
 
 def main():
     wb = load_workbook(src_filename)
@@ -22,23 +23,24 @@ def main():
 
 def generateText(row):
     tweet = ""
+
+    # Time
+    time = (row[8])[5:] # remove year
+    tweet += time
     
     # Urgent level
     urgent = row[0].lower()
-    tweet += " URGENCIA: " + URGENT_LEVEL[urgent]
+    tweet += " " + URGENT_LEVEL[urgent]+":"
 
-    # Need Brigadists
-    needHelp = (row[1].lower() == "si") or (row[1].lower() == "sí")
-    if (needHelp):
-        tweet += ", NECESITAN BRIGADISTAS"
-
-    # Time
-    time = row[8]
-    tweet += ", " + time
-    
+####    # Need Brigadists
+####    needHelp = (row[1].lower() == "si") or (row[1].lower() == "sí")
+####    if (needHelp):
+####        tweet += ", NECESITAN BRIGADISTAS"
+##
+##    
     # Address
     address = row[5]
-    tweet += " @ " + address
+    tweet += " Rescate en " + address
     
     # Zone
     zone = row[6]
