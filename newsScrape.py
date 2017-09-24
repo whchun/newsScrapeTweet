@@ -14,23 +14,8 @@ INFO_HASH_TAG = "#infoverificada19S"
 # Data label
 URGENT_LEVEL = {"alto":"URGE", "alta":"URGE", "medio":"SeNecesita", "media":"SeNecesita", "bajo":"SeNecesita", "baja":"SeNecesita"}
 
-def main():
-    tweetList = [];
-    wb = load_workbook(src_filename)
-    ws = wb[src_sheet[sheet_index]]
-    for row in ws.iter_rows(min_row=DATA_MIN_ROW, max_col=DATA_MAX_COL):
-        row_data = []
-        for cell in row:
-            row_data.append(cell.value);
-        tweet = generateText(row_data)
-        tweetList.append(convertTweetToJson(tweet))
-    jsonData = createJson(tweetList)
-    print("Generated: " + str(len(tweetList)) + " tweets")
-    saveFile(jsonData, dst_filename)
-    print("---Finish saving generated text to: " + dst_filename + "---")
-
-#UrgentLevel (X)
-#NEED BRIGADISTS (X)
+#UrgentLevel
+#NEED BRIGADISTS 
 #MOST IMPORTANT REQUIRED
 #ADMITTED
 #NOT REQUIRED
@@ -81,8 +66,10 @@ def getAddress(address):
     formatText = '=HYPERLINK'
     hasLink = (address[0:len(formatText)]) == formatText
     if (hasLink):
-        address = address[len(formatText):]
-        return "TEST ADDRESS"
+        addressTmp = re.sub('=HYPERLINK\(', "", address)
+        addressTmp1 = re.sub('\)', "", addressTmp)
+        addressList = addressTmp1.split(",")
+        return addressList[1]
     else:
         return address
 
@@ -107,5 +94,23 @@ def saveFile(data, filename):
     file = open(filename, 'w')
     file.write(data)
     file.close
+
+#-------------------------------------------------------
+# Main
+#-------------------------------------------------------
+def main():
+    tweetList = [];
+    wb = load_workbook(src_filename)
+    ws = wb[src_sheet[sheet_index]]
+    for row in ws.iter_rows(min_row=DATA_MIN_ROW, max_col=DATA_MAX_COL):
+        row_data = []
+        for cell in row:
+            row_data.append(cell.value);
+        tweet = generateText(row_data)
+        tweetList.append(convertTweetToJson(tweet))
+    jsonData = createJson(tweetList)
+    print("Generated: " + str(len(tweetList)) + " tweets")
+    saveFile(jsonData, dst_filename)
+    print("---Finish saving generated text to: " + dst_filename + "---")
 
 main()
