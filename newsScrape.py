@@ -51,7 +51,7 @@ def generateText(row):
         urgent = row[0].lower()
         urgent = urgent.rstrip()
         urgent = urgent.lstrip()
-        tweet += " " + URGENT_LEVEL[urgent]+""
+        tweet += " " + URGENT_LEVEL[urgent]+" "
 
 ####    # Need Brigadists
 ####    needHelp = (row[1].lower() == "si") or (row[1].lower() == "sí")
