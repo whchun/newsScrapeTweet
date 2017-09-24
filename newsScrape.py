@@ -66,10 +66,9 @@ def getAddress(address):
     formatText = '=HYPERLINK'
     hasLink = (address[0:len(formatText)]) == formatText
     if (hasLink):
-        addressTmp = re.sub('=HYPERLINK\(', "", address)
-        addressTmp1 = re.sub('\)', "", addressTmp)
-        addressList = addressTmp1.split(",")
-        return addressList[1]
+        addressTmp = re.sub( "HYPERLINK\(\".+\"," , "" , address)
+        address = addressTmp[2:len(addressTmp)-2]
+        return address
     else:
         return address
 
