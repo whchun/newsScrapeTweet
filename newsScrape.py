@@ -65,17 +65,20 @@ def generateTweet(row):
     # Hash Tag
     tweet += INFO_HASH_TAG
 
+    # Zone
+    if (row[6] is not None):
+        zone = row[6]
+        tmpTweet = tweet + " Rescate en " + zone
+        if (validTweetLength(tmpTweet)):
+            tweet = tmpTweet
+
     # Address
     if (row[5] is not None):
         address = row[5]
         address = getAddress(address)
-        tweet += " Rescate en " + address
-
-    # Zone
-    if (row[6] is not None):
-        zone = row[6]
-        tweet += " " + zone
-
+        tmpTweet = tweet + " " + address
+        if (validTweetLength(tmpTweet)):
+            tweet = tmpTweet
     return tweet
 
 # Parse address and return address text
@@ -90,7 +93,8 @@ def getAddress(address):
     else:
         return address
 
-def checkTweetLength(text):
+# Return true if length is still valid
+def validTweetLength(text):
     return (len(text) < MAX_TWEET_CHARACTERS)
 
 # Convert string to JSON format
